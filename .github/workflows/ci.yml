@@ -71,6 +71,9 @@ jobs:
           cat backend/backend.log || true
           exit 1
 
+      - name: Print backend health response before Karate
+        run: curl -v http://localhost:8080/api/dashboard
+
       - name: Karate API tests
         working-directory: tests/karate
         run: mvn -B test -DbaseUrl=http://localhost:8080
@@ -83,6 +86,14 @@ jobs:
           path: |
             tests/karate/target/karate-reports
             tests/karate/target/surefire-reports
+          if-no-files-found: warn
+
+      - name: Upload backend runtime log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-runtime-log
+          path: backend/backend.log
           if-no-files-found: warn
 
       - name: Start frontend

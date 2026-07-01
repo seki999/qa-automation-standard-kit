@@ -29,8 +29,14 @@ Feature: Project quality management API
     Then status 200
     And match response.status == 'PASSED'
 
+    Given path '/api/test-cases'
+    When method get
+    Then status 200
+    * def createdTestCases = karate.filter(response, function(testCase){ return testCase.id == testCaseId })
+    And match createdTestCases[0].status == 'PASSED'
+
     Given path '/api/dashboard'
     When method get
     Then status 200
-    And match response.totalTestCases >= 1
-    And match response.passed >= 1
+    And assert response.totalTestCases >= 1
+    And assert response.passed >= 1
