@@ -1,0 +1,79 @@
+{
+  "info": {
+    "name": "QA Automation Standard Kit API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Project quality management API smoke tests for onboarding and manual API exploration."
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "projectId", "value": "" },
+    { "key": "testCaseId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Create Project",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/projects",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Postman Project\",\"owner\":\"API QA\",\"startDate\":\"2026-07-01\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test('project created', () => pm.response.to.have.status(200));",
+            "pm.collectionVariables.set('projectId', pm.response.json().id);"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "List Projects",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/projects" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('projects listed', () => pm.response.to.have.status(200));"] } }]
+    },
+    {
+      "name": "Create Test Case",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/test-cases",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"projectId\":{{projectId}},\"title\":\"Postman creates test case\",\"priority\":\"High\",\"status\":\"NOT_STARTED\"}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test('test case created', () => pm.response.to.have.status(200));",
+            "pm.collectionVariables.set('testCaseId', pm.response.json().id);"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "Register Test Result",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/test-results",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"testCaseId\":{{testCaseId}},\"status\":\"PASSED\",\"executedBy\":\"postman\",\"note\":\"collection smoke\"}"
+        }
+      },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('result registered', () => pm.response.to.have.status(200));"] } }]
+    },
+    {
+      "name": "Get Dashboard",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/dashboard" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('dashboard returned', () => pm.response.to.have.status(200));"] } }]
+    }
+  ]
+}
