@@ -90,6 +90,14 @@ jobs:
           FRONTEND_URL: http://localhost:5173
         run: npm test
 
+      - name: Selenium E2E tests
+        working-directory: tests/selenium
+        env:
+          FRONTEND_URL: http://localhost:5173
+        run: |
+          npm install
+          npm test
+
       - name: Upload Playwright reports
         if: always()
         uses: actions/upload-artifact@v4

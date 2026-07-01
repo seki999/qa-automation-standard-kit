@@ -1,19 +1,25 @@
 import http from 'node:http';
 
-let nextProjectId = 3;
-let nextTestCaseId = 5;
+let nextProjectId = 6;
+let nextTestCaseId = 8;
 let nextResultId = 1;
 
 const projects = [
-  { id: 1, name: 'Internal Project Portal', owner: 'QA Enablement Team', startDate: '2026-07-01' },
-  { id: 2, name: 'Billing Modernization', owner: 'Platform Team', startDate: '2026-06-17' }
+  { id: 1, name: 'CRM Renewal Project', owner: 'Customer Platform Team', startDate: '2026-07-01' },
+  { id: 2, name: 'Billing Modernization', owner: 'Platform Team', startDate: '2026-06-17' },
+  { id: 3, name: 'Internal Project Portal', owner: 'QA Enablement Team', startDate: '2026-06-24' },
+  { id: 4, name: 'Inventory Management System', owner: 'Supply Chain Team', startDate: '2026-06-10' },
+  { id: 5, name: 'QA Automation Pilot', owner: 'Quality Engineering Team', startDate: '2026-07-01' }
 ];
 
 const testCases = [
-  { id: 1, projectId: 1, title: 'Create project from project management screen', priority: 'High', status: 'PASSED' },
-  { id: 2, projectId: 1, title: 'Register execution result from test case detail', priority: 'High', status: 'FAILED' },
-  { id: 3, projectId: 2, title: 'Calculate dashboard pass rate', priority: 'Medium', status: 'IN_PROGRESS' },
-  { id: 4, projectId: 2, title: 'Block test case when external API is unavailable', priority: 'Low', status: 'BLOCKED' }
+  { id: 1, projectId: 1, title: 'Create project from management screen', priority: 'High', status: 'PASSED' },
+  { id: 2, projectId: 1, title: 'Register test execution result', priority: 'High', status: 'FAILED' },
+  { id: 3, projectId: 2, title: 'Calculate dashboard pass rate', priority: 'Medium', status: 'PASSED' },
+  { id: 4, projectId: 2, title: 'Block test case when external API is unavailable', priority: 'Low', status: 'BLOCKED' },
+  { id: 5, projectId: 3, title: 'Validate project creation API', priority: 'High', status: 'PASSED' },
+  { id: 6, projectId: 4, title: 'Update test case status', priority: 'Medium', status: 'IN_PROGRESS' },
+  { id: 7, projectId: 5, title: 'Verify dashboard quality metrics', priority: 'High', status: 'NOT_STARTED' }
 ];
 
 const results = [];

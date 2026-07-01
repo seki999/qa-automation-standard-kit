@@ -1,7 +1,6 @@
 const assert = require('assert');
 const { afterEach, beforeEach, describe, it } = require('node:test');
 const { Builder, By, until } = require('selenium-webdriver');
-require('chromedriver');
 
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
 

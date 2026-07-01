@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "node --test *.test.js"
+    "test": "node --test project-quality.test.js"
   },
   "devDependencies": {
-    "chromedriver": "^130.0.0",
     "selenium-webdriver": "^4.26.0"
   }
 }

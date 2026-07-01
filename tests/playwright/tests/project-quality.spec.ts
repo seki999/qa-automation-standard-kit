@@ -7,14 +7,14 @@ test('project, test case, result, and dashboard flow', async ({ page }) => {
   await page.getByLabel('Project Name').fill(projectName);
   await page.getByLabel('Owner').fill('E2E QA');
   await page.getByRole('button', { name: 'Create Project' }).click();
-  await expect(page.getByText(projectName)).toBeVisible();
+  await expect(page.locator('li').filter({ hasText: projectName }).first()).toBeVisible();
 
   const testCaseTitle = `Playwright Test Case ${Date.now()}`;
   await page.getByLabel('Project', { exact: true }).selectOption({ label: projectName });
   await page.getByLabel('Test Case Title').fill(testCaseTitle);
   await page.getByLabel('Priority').selectOption('High');
   await page.getByRole('button', { name: 'Create Test Case' }).click();
-  await expect(page.getByText(testCaseTitle)).toBeVisible();
+  await expect(page.locator('li').filter({ hasText: testCaseTitle }).first()).toBeVisible();
 
   await page.getByLabel('Test Case', { exact: true }).selectOption({ label: testCaseTitle });
   await page.getByLabel('Status').selectOption('PASSED');

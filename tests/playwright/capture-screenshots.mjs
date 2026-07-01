@@ -19,29 +19,32 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
 await page.goto(frontendUrl, { waitUntil: 'networkidle' });
 await screenshot(page, '01-dashboard-overview.png');
 
-const projectName = `Screenshot Project ${Date.now()}`;
+await page.locator('.workspace').screenshot({ path: path.join(outputDir, '02-project-management.png') });
+
+const projectName = 'Customer Support Portal Upgrade';
 await page.getByLabel('Project Name').fill(projectName);
-await page.getByLabel('Owner').fill('QA Portfolio Team');
+await page.getByLabel('Owner').fill('Customer Experience Team');
 await page.getByRole('button', { name: 'Create Project' }).click();
 await page.locator('li').filter({ hasText: projectName }).first().waitFor();
-await screenshot(page, '02-project-created.png');
+await page.locator('.lists').screenshot({ path: path.join(outputDir, '05-projects-list.png') });
 
-const testCaseTitle = `Screenshot Test Case ${Date.now()}`;
+const testCaseTitle = 'Confirm that test execution results are reflected in the dashboard';
 await page.getByLabel('Project', { exact: true }).selectOption({ label: projectName });
 await page.getByLabel('Test Case Title').fill(testCaseTitle);
 await page.getByLabel('Priority').selectOption('High');
 await page.getByRole('button', { name: 'Create Test Case' }).click();
 await page.locator('li').filter({ hasText: testCaseTitle }).first().waitFor();
-await screenshot(page, '03-test-case-created.png');
+await page.locator('.workspace').screenshot({ path: path.join(outputDir, '03-test-case-management.png') });
+await page.locator('.lists').screenshot({ path: path.join(outputDir, '06-test-cases-list.png') });
 
 await page.getByLabel('Test Case', { exact: true }).selectOption({ label: testCaseTitle });
 await page.getByLabel('Status').selectOption('PASSED');
 await page.getByRole('button', { name: 'Register Result' }).click();
 await page.getByText(`${projectName} / PASSED`).waitFor();
-await screenshot(page, '04-result-registered.png');
+await page.locator('.workspace').screenshot({ path: path.join(outputDir, '04-test-result-registration.png') });
 
 await page.setViewportSize({ width: 390, height: 1200 });
 await page.goto(frontendUrl, { waitUntil: 'networkidle' });
-await screenshot(page, '05-mobile-responsive.png');
+await screenshot(page, '07-responsive-view.png');
 
 await browser.close();

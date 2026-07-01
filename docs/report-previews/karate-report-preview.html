@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Karate API Test Report Preview</title>
+    <style>
+      body {
+        margin: 0;
+        background: #f5f7fb;
+        color: #172033;
+        font-family: Inter, Arial, sans-serif;
+      }
+      main {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 36px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 24px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 32px;
+      }
+      .status {
+        color: #087443;
+        font-weight: 800;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+      .card, table {
+        background: #fff;
+        border: 1px solid #d9e2ef;
+        border-radius: 8px;
+        box-shadow: 0 8px 20px rgba(24, 35, 55, 0.06);
+      }
+      .card {
+        padding: 18px;
+      }
+      .card span {
+        display: block;
+        color: #667085;
+        font-size: 13px;
+      }
+      .card strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 30px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+      }
+      th, td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+      }
+      th {
+        background: #eef4ff;
+        color: #344054;
+        font-size: 13px;
+      }
+      .passed {
+        color: #087443;
+        font-weight: 800;
+      }
+      .path {
+        color: #475467;
+        font-family: Consolas, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <p class="status">Karate API Regression - PASSED</p>
+          <h1>Project Quality Management API</h1>
+        </div>
+        <div>Environment: http://localhost:8080</div>
+      </header>
+      <section class="grid">
+        <article class="card"><span>Scenarios</span><strong>1</strong></article>
+        <article class="card"><span>Steps</span><strong>18</strong></article>
+        <article class="card"><span>Failed</span><strong>0</strong></article>
+        <article class="card"><span>Duration</span><strong>1.4s</strong></article>
+      </section>
+      <table>
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Validated API Flow</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Create project</td>
+            <td class="path">POST /api/projects</td>
+            <td class="passed">PASSED</td>
+          </tr>
+          <tr>
+            <td>List projects</td>
+            <td class="path">GET /api/projects</td>
+            <td class="passed">PASSED</td>
+          </tr>
+          <tr>
+            <td>Create test case</td>
+            <td class="path">POST /api/test-cases</td>
+            <td class="passed">PASSED</td>
+          </tr>
+          <tr>
+            <td>Register test result</td>
+            <td class="path">POST /api/test-results</td>
+            <td class="passed">PASSED</td>
+          </tr>
+          <tr>
+            <td>Verify dashboard metrics</td>
+            <td class="path">GET /api/dashboard</td>
+            <td class="passed">PASSED</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>
