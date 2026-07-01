@@ -23,7 +23,7 @@ jobs:
 
       - name: Backend unit and integration tests
         working-directory: backend
-        run: mvn test
+        run: mvn -B test
 
       - name: Upload backend test reports
         if: always()
@@ -31,57 +31,84 @@ jobs:
         with:
           name: backend-surefire-reports
           path: backend/target/surefire-reports
+          if-no-files-found: warn
+
+      - name: Package backend application
+        working-directory: backend
+        run: mvn -B -DskipTests package
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            frontend/package-lock.json
+            tests/playwright/package-lock.json
+            tests/selenium/package-lock.json
 
       - name: Frontend build
         working-directory: frontend
         run: |
-          npm install
+          npm ci
           npm run build
 
       - name: Start backend
         working-directory: backend
-        run: nohup mvn spring-boot:run > backend.log 2>&1 &
+        run: |
+          nohup java -jar target/qa-automation-backend-0.0.1-SNAPSHOT.jar > backend.log 2>&1 &
+          echo $! > backend.pid
 
       - name: Wait for backend
         run: |
           for i in {1..60}; do
             curl -fsS http://localhost:8080/api/dashboard && exit 0
+            echo "Waiting for backend... attempt ${i}"
+            tail -n 80 backend/backend.log || true
             sleep 2
           done
+          echo "Backend did not become healthy"
+          cat backend/backend.log || true
           exit 1
 
       - name: Karate API tests
         working-directory: tests/karate
-        run: mvn test -DbaseUrl=http://localhost:8080
+        run: mvn -B test -DbaseUrl=http://localhost:8080
 
       - name: Upload Karate reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: karate-reports
-          path: tests/karate/target/karate-reports
+          path: |
+            tests/karate/target/karate-reports
+            tests/karate/target/surefire-reports
+          if-no-files-found: warn
 
       - name: Start frontend
         working-directory: frontend
-        run: nohup npm run dev -- --host 127.0.0.1 --port 5173 > frontend.log 2>&1 &
+        env:
+          VITE_API_BASE_URL: http://localhost:8080
+        run: |
+          nohup npm run dev -- --host 127.0.0.1 --port 5173 > frontend.log 2>&1 &
+          echo $! > frontend.pid
 
       - name: Wait for frontend
         run: |
           for i in {1..60}; do
             curl -fsS http://localhost:5173 && exit 0
+            echo "Waiting for frontend... attempt ${i}"
+            tail -n 80 frontend/frontend.log || true
             sleep 2
           done
+          echo "Frontend did not become healthy"
+          cat frontend/frontend.log || true
           exit 1
 
       - name: Install Playwright
         working-directory: tests/playwright
         run: |
-          npm install
+          npm ci
           npx playwright install --with-deps chromium
 
       - name: Playwright E2E tests
@@ -90,12 +117,15 @@ jobs:
           FRONTEND_URL: http://localhost:5173
         run: npm test
 
+      - name: Set up Chrome for Selenium
+        uses: browser-actions/setup-chrome@v1
+
       - name: Selenium E2E tests
         working-directory: tests/selenium
         env:
           FRONTEND_URL: http://localhost:5173
         run: |
-          npm install
+          npm ci
           npm test
 
       - name: Upload Playwright reports
@@ -106,3 +136,4 @@ jobs:
           path: |
             tests/playwright/playwright-report
             tests/playwright/test-results
+          if-no-files-found: warn

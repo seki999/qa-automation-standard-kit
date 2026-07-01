@@ -19,16 +19,6 @@
         </dependency>
     </dependencies>
     <build>
-        <testSourceDirectory>.</testSourceDirectory>
-        <testResources>
-            <testResource>
-                <directory>.</directory>
-                <includes>
-                    <include>**/*.feature</include>
-                    <include>karate-config.js</include>
-                </includes>
-            </testResource>
-        </testResources>
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>

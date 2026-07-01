@@ -1,6 +1,7 @@
 const assert = require('assert');
 const { afterEach, beforeEach, describe, it } = require('node:test');
 const { Builder, By, until } = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
 
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
 
@@ -8,7 +9,13 @@ describe('Selenium project quality smoke', function () {
   let driver;
 
   beforeEach(async function () {
-    driver = await new Builder().forBrowser('chrome').build();
+    const options = new chrome.Options()
+      .addArguments('--headless=new')
+      .addArguments('--no-sandbox')
+      .addArguments('--disable-dev-shm-usage')
+      .addArguments('--window-size=1440,1100');
+
+    driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
   });
 
   afterEach(async function () {
